@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id='replace'>
+    <h1 id='replace'>Press the button to sign out:</h1>
+    <button hx-post="/signout" hx-trigger="click" hx-swap="outerHTML" hx-target='#replace'>Sign Out</button>    
+</div>
+{% endblock %}
+

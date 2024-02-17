@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card" style="width: 100vw; height=100vh;">
+    <div class="card-body">
+        <h5 class="card-title">Welcome to The Making Rooms</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">Please sign in</h6>
+        <form id='replace'>
+        <div class="input-group input-group-lg">
+        <input
+        class="form-control"
+        type="text" 
+        name="first_name" 
+        placeholder="First Name" 
+        {% if names %}value={{names.0}} {% endif %}>
+        <br>
+        </div> 
+        <div class="input-group input-group-lg"> 
+        <input 
+        class="form-control"
+        type="text" 
+        name="last_name" 
+        placeholder="Last Name" 
+        {% if names %}value={{names.1}} {% endif %}>
+        <br>
+        </div>
+        <button type="button" class="btn btn-primary" hx-post="/signin" hx-swap="outerHTML" hx-target='#replace'>
+        Sign In
+        </button>
+    </form>
+    </div>
+</div>
+ 
+{% endblock %}
