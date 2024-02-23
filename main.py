@@ -2,9 +2,13 @@ from flask import Flask, render_template,  request, url_for, flash, redirect, ma
 import csv
 import random
 import datetime
+from flask_socketio import SocketIO
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'a24b722b440cc959b6db422125aed818acdcbcd3a22a6af2'
+socketio = SocketIO(app)
+
 
 def write_person_to_csv(data, rand_id, current_time):
     with open('people.csv', mode='a', newline='') as database:
@@ -44,6 +48,30 @@ def get_user_name(rand_id):
             if row[0] == rand_id:
                 return [row[1], row[2]]
     return None
+
+def write_to_machine_use(machine_id, rand_id):
+    usage_id = ''.join(random.choice('0123456789ABCDEF') for i in range(32))
+    with open('machine_usage.csv', mode='a', newline='') as database:
+        csv_writer = csv.writer(database, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        #usage_id, machine_id, user_id, start_time, start_time+1 hour
+        csv_writer.writerow([usage_id, machine_id, rand_id, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(hours=1)])
+    database.close()
+    return usage_id
+
+def checkout_machine_use(usage_id):
+    #update machine_usage.csv, last row to current time
+    with open('machine_usage.csv', mode='r') as database:
+        csv_reader = csv.reader(database)
+        rows = list(csv_reader)
+        for row in rows:
+            if row[0] == usage_id:
+                row[4] = datetime.datetime.now()
+                break
+    with open('machine_usage.csv', mode='w', newline='') as database:
+        csv_writer = csv.writer(database, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerows(rows)
+
+
 
 @app.route('/')
 def index():
@@ -113,7 +141,24 @@ def signout():
     with open('database.csv', mode='w', newline='') as database:
         csv_writer = csv.writer(database, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerows(rows)
+    return 'You have been signed out. You can now close your browser.'
 
-    return redirect(url_for('index'))
+
+@app.route('/machine_use', methods=['GET', 'POST'])
+def machine_use():
+    if request.method == 'POST':
+        form = request.form.to_dict()
+        rand_id = request.cookies.get('uuid')
+
+        if check_signed_in(rand_id):
+            usage_id = write_to_machine_use(form['machine_id'], rand_id)
+            response = make_response(render_template('machine_use.html', usage_id=usage_id))
+            response.set_cookie('usage_id', usage_id, max_age=datetime.timedelta(days=400))
+            return render_template('machine_use.html')
+        else:
+            return redirect(url_for('index'))
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0' )
+    socketio.run(app, debug=True, host='0.0.0.0' )

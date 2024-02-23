@@ -1,9 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id='replace'>
-    <h1 id='replace'>Press the button to sign out:</h1>
-    <button hx-post="/signout" hx-trigger="click" hx-swap="outerHTML" hx-target='#replace'>Sign Out</button>    
+<div class="card" class="m-2" style="width: 100vw; height=100vh;">
+    <div class="card-body">
+        <h5 class="card-title">Sign out</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">Press the button to sign out</h6>
+        <div id='replace'>
+
+            <button class="btn btn-primary btn-lg w-100" hx-post="/signout" hx-trigger="click" hx-swap="outerHTML" hx-target='#replace'>Sign Out</button>    
+        </div>
+    </div>
 </div>
 {% endblock %}
 

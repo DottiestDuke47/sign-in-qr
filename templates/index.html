@@ -7,25 +7,29 @@
         <h5 class="card-title">Welcome to The Making Rooms</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">Please sign in</h6>
         <form id='replace'>
-        <div class="input-group input-group-lg">
+        <div class="input">
+        <label for="firstNameInput" class="form-label">First Name</label>
         <input
-        class="form-control"
+        id="firstNameInput"
+        class="form-control form-control-lg"
         type="text" 
         name="first_name" 
         placeholder="First Name" 
         {% if names %}value={{names.0}} {% endif %}>
         <br>
         </div> 
-        <div class="input-group input-group-lg"> 
+        <div class="input"> 
+        <label for="lastNameInput" class="form-label">Last Name</label>
         <input 
-        class="form-control"
+        id="lastNameInput"
+        class="form-control form-control-lg"
         type="text" 
         name="last_name" 
         placeholder="Last Name" 
         {% if names %}value={{names.1}} {% endif %}>
         <br>
         </div>
-        <button type="button" class="btn btn-primary" hx-post="/signin" hx-swap="outerHTML" hx-target='#replace'>
+        <button type="button" class="btn btn-primary btn-lg w-100" hx-post="/signin" hx-swap="outerHTML" hx-target='#replace'>
         Sign In
         </button>
     </form>
