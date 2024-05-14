@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add manual entry</h1>
+    <form method="post">
+        <input type="text" name="first_name" placeholder="Name">
+        <input type="text" name="last_name" placeholder="Name">
+        <div class="input">
+            <label for="customRange3" class="form-label">Number of dependants under 14</label>
+            <input type="range" class="form-range" min="0" max="2" step="1" id="customRange3" value="0" name="dependants">
+            <div class="w-full d-flex justify-content-between">
+                <p>0</p>
+                <p>1</p>
+                <p>2</p>
+            </div>
+            <br>
+        </div>
+        <button type="submit">Add</button>
+    </form>
+{% endblock %}
+

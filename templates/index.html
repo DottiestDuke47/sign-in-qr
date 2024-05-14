@@ -1,13 +1,27 @@
 {% extends "base.html" %}
 
+
 {% block content %}
+
+{% if not error %}
 
 <div class="card" style="width: 100vw; height=100vh;">
     <div class="card-body">
         <h5 class="card-title">Welcome to The Making Rooms</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">Please sign in</h6>
+        
+{% endif %}
+
+        {% if error == "last_name" %}
+        <p>Please enter your last name</p>
+        {% endif %}
+        {% if error == "first_name" %}
+        <p>Please enter your first name</p>
+        {% endif %}
+        
         <form id='replace'>
         <div class="input">
+        
         <label for="firstNameInput" class="form-label">First Name</label>
         <input
         id="firstNameInput"
@@ -19,6 +33,7 @@
         <br>
         </div> 
         <div class="input"> 
+        
         <label for="lastNameInput" class="form-label">Last Name</label>
         <input 
         id="lastNameInput"
@@ -29,11 +44,26 @@
         {% if names %}value={{names.1}} {% endif %}>
         <br>
         </div>
+
+        <div class="input">
+        <label for="customRange3" class="form-label">Number of dependants under 14</label>
+        <input type="range" class="form-range" min="0" max="2" step="1" id="customRange3" value="0" name="dependants">
+        <div class="w-full d-flex justify-content-between">
+            <p>0</p>
+            <p>1</p>
+            <p>2</p>
+        </div>
+        <br>
+        </div>
+
+
         <button type="button" class="btn btn-primary btn-lg w-100" hx-post="/signin" hx-swap="outerHTML" hx-target='#replace'>
         Sign In
         </button>
     </form>
+
+{% if not error %}
     </div>
 </div>
- 
+{% endif %}
 {% endblock %}
