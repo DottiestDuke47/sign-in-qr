@@ -65,27 +65,6 @@ def get_user_name(rand_id):
                 return [row[1], row[2]]
     return None
 
-def write_to_machine_use(machine_id, rand_id):
-    usage_id = ''.join(random.choice('0123456789ABCDEF') for i in range(32))
-    with open('machine_usage.csv', mode='a', newline='') as database:
-        csv_writer = csv.writer(database, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        #usage_id, machine_id, user_id, start_time, start_time+1 hour
-        csv_writer.writerow([usage_id, machine_id, rand_id, datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(hours=1)])
-    database.close()
-    return usage_id
-
-def checkout_machine_use(usage_id):
-    #update machine_usage.csv, last row to current time
-    with open('machine_usage.csv', mode='r') as database:
-        csv_reader = csv.reader(database)
-        rows = list(csv_reader)
-        for row in rows:
-            if row[0] == usage_id:
-                row[4] = datetime.datetime.now()
-                break
-    with open('machine_usage.csv', mode='w', newline='') as database:
-        csv_writer = csv.writer(database, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerows(rows)
 
 @app.route('/')
 def index():
